@@ -230,57 +230,66 @@ function calculateAge($birthdate) {
     </div>
                 <!-- Button Group -->
                 <div class="btn-container">
-                    <a href="tambah.php" class="btn btn-primary">Tambah Data</a>
+                    <a href="tambah-dataos.php" class="btn btn-primary">Tambah Data</a>
                     <form action="import.php" method="post" enctype="multipart/form-data">
     <input type="file" name="file_excel" accept=".xls, .xlsx">
     <button type="submit" name="import" class="btn btn-primary">Import Data</button>
 </form>
-                    <a href="download-trainee.php" class="btn btn-primary">Download Data</a>
+                    <a href="download-dataos1.php" class="btn btn-primary">Download Data</a>
                 </div><br>
-                <!-- Tabel Data Karyawan Magang -->
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>BA</th>
-                            <th>Posisi</th>
-                            <th>Nama Lengkap</th>
-                            <th>Alamat</th>
-                            <th>Umur</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        if ($result->num_rows > 0) { 
-                            $no = 1; // Inisialisasi nomor urut
-                            while ($row = $result->fetch_assoc()) { 
-                                $umur = calculateAge($row['tanggal_lahir']);
-                        ?>
-                                <tr>
-                                    <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($row["ba"]) ?></td>
-                                    <td><?= htmlspecialchars($row["nama"]) ?></td>
-                                    <td><?= htmlspecialchars($row["posisi"]) ?></td>
-                                    <td><?= htmlspecialchars($row["nama"]) ?></td>
-                                    <td><?= htmlspecialchars($row["alamat"]) ?></td>
-                                    <td><?= htmlspecialchars($row["umur"]) ?></td>
-                                    <td><?= htmlspecialchars($row["jenis_kelamin"]) ?></td>
-                                    <td><?= $umur ?></td>
-                                    <td>
-                                        <a href="edit.php?id=<?= $row["id"] ?>" class="btn btn-primary btn-sm">Edit</a><br> 
-                                        <a href="hapus.php?id=<?= $row["id"] ?>" class="btn btn-danger btn-sm">Hapus</a>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                        <?php } else { ?>
-                            <tr>
-                                <td colspan="18">Tidak ada data yang ditemukan.</td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <!-- Tabel Data OS -->
+               <table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>BA</th>
+            <th>BA Cabang</th>
+            <th>Region</th>
+            <th>Cabang</th>
+            <th>Posisi</th>
+            <th>NIK</th>
+            <th>Nama Lengkap</th>
+            <th>Alamat</th>
+            <th>Umur</th>
+            <th>Tanggal Lahir</th>
+            <th>Jenis Kelamin</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+        if ($result->num_rows > 0) { 
+            $no = 1; // Inisialisasi nomor urut
+            while ($row = $result->fetch_assoc()) { 
+                $umur = calculateAge($row['tanggal_lahir']);
+        ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= htmlspecialchars($row["ba"]) ?></td>
+                    <td><?= htmlspecialchars($row["ba_cabang"]) ?></td>
+                    <td><?= htmlspecialchars($row["region"]) ?></td> 
+                    <td><?= htmlspecialchars($row["cabang"]) ?></td>
+                    <td><?= htmlspecialchars($row["posisi"]) ?></td>
+                    <td><?= htmlspecialchars($row["nik"]) ?></td>
+                    <td><?= htmlspecialchars($row["nama"]) ?></td>
+                    <td><?= htmlspecialchars($row["alamat"]) ?></td>
+                    <td><?= $umur ?></td>
+                    <td><?= htmlspecialchars($row["tanggal_lahir"]) ?></td>
+                    <td><?= htmlspecialchars($row["jenis_kelamin"]) ?></td>
+                    <td>
+                        <a href="edit-dataos.php?id=<?= $row["id"] ?>" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="hapus-dataos.php?id=<?= $row["id"] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
+                    </td>
+                </tr>
+        <?php } ?>
+        <?php } else { ?>
+            <tr>
+                <td colspan="13" class="text-center">Tidak ada data yang ditemukan.</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
             </main>
             <footer class="footer">
                 <p>&copy; <?= date("Y") ?> All rights reserved</p>
