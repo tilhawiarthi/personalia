@@ -5,12 +5,12 @@ require_once '../koneksi.php';
 $search = '';
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    $query = "SELECT * FROM os WHERE nama LIKE ? ORDER BY ba ASC";
+    $query = "SELECT * FROM os WHERE nama LIKE ? ORDER BY ba_cabang ASC";
     $stmt = $conn->prepare($query);
     $searchTerm = "%" . $search . "%";
     $stmt->bind_param("s", $searchTerm);
 } else {
-    $query = "SELECT * FROM os ORDER BY ba ASC";
+    $query = "SELECT * FROM os ORDER BY ba_cabang ASC";
     $stmt = $conn->prepare($query);
 }
 $stmt->execute();
@@ -120,8 +120,8 @@ function calculateAge($birthdate) {
                                 <td><?= htmlspecialchars($row["tanggal_lahir"]) ?></td>
                                 <td><?= htmlspecialchars($row["jenis_kelamin"]) ?></td>
                                 <td>
-                                    <a href="edit-dataos.php?id=<?= $row["id"] ?>" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="hapus-dataos.php?id=<?= $row["id"] ?>" class="btn btn-danger btn-sm">Hapus</a>
+                                    <a href="edit.php?id=<?= $row["id"] ?>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="hapus.php?id=<?= $row["id"] ?>" class="btn btn-danger btn-sm">Hapus</a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>

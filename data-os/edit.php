@@ -12,21 +12,26 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $ba = $row["ba"];
-    $ba_cabang = $row["ba_cabang"];
-    $region = $row["region"];
-    $cabang = $row["cabang"];
-    $posisi = $row["posisi"];
-    $nik = $row["nik"];
-    $nama = $row["nama"]; 
-    $alamat = $row["alamat"]; 
-    $umur = $row["umur"];
-    $tanggal_lahir = $row["tanggal_lahir"];
-    $jenis_kelamin = $row["jenis_kelamin"];
+        // Mengatur nilai default dari database jika data ditemukan
+        $ba = $row["ba"] ?? '';
+        $ba_cabang = $row["ba_cabang"] ?? '';
+        $region = $row["region"] ?? '';
+        $cabang = $row["cabang"] ?? '';
+        $posisi = $row["posisi"] ?? '';
+        $nik = $row["nik"] ?? '';
+        $nama = $row["nama"] ?? '';
+        $alamat = $row["alamat"] ?? '';
+        $umur = $row["umur"] ?? '';
+        $tanggal_lahir = $row["tanggal_lahir"] ?? '';
+        $jenis_kelamin = $row["jenis_kelamin"] ?? '';
+} else {
+    echo "Data tidak ditemukan.";
+    exit;
+
 }
 
 if (isset($_POST["submit"])) {
-    $row = $result->fetch_assoc();
+    // Mengambil data dari form
     $ba = $row["ba"];
     $ba_cabang = $row["ba_cabang"];
     $region = $row["region"];
@@ -39,17 +44,13 @@ if (isset($_POST["submit"])) {
     $tanggal_lahir = $row["tanggal_lahir"];
     $jenis_kelamin = $row["jenis_kelamin"];
 
-    // Tentukan status berdasarkan tanggal_keluar
-    // $today = date("d-m-Y");
-    // $status = ($tanggal_keluar < $today) ? "Nonaktif" : "Aktif";
-
     // Menyiapkan query untuk update
-    // $stmt = $conn->prepare("UPDATE os SET ba = ?, ba_cabang = ?, region = ?, cabang = ?, posisi = ?, nik = ?, nama = ?, alamat = ?, umur = ?, tanggal_lahir = ?, jenis_kelamin = ? WHERE id = ?");
-    // $stmt->bind_param("sssssssssssi", $ba, $ba_cabang, $region, $cabang, $posisi, $nik, $nama, $alamat, $umur, $tanggal_lahir, $jenis_kelamin, $id);
+    $stmt = $conn->prepare("UPDATE os SET ba = ?, ba_cabang = ?, region = ?, cabang = ?, posisi = ?, nik = ?, nama = ?, alamat = ?, umur = ?, tanggal_lahir = ?, jenis_kelamin = ? WHERE id = ?");
+    $stmt->bind_param("sssssssssssi", $ba, $ba_cabang, $region, $cabang, $posisi, $nik, $nama, $alamat, $umur, $tanggal_lahir, $jenis_kelamin, $id);
 
     if ($stmt->execute()) {
         // Setelah update, kembali ke halaman home untuk melihat perubahan
-        header("Location: download-dataos.php");
+        header("Location: data_os.php");
         exit();
     } else {
         $message = "<div class='alert alert-danger'>Gagal Mengupdate Data OS</div>";
@@ -122,20 +123,18 @@ $conn->close();
     <input type="text" name="region" value="<?php echo htmlspecialchars($region) ?>" required><br><br>
     <label>Cabang:</label>
     <input type="text" name="cabang" value="<?php echo htmlspecialchars($cabang) ?>" required><br><br>
-    <label>Nama Lengkap:</label>
-    <input type="text" name="nama_lengkap" value="<?php echo htmlspecialchars($nama_lengkap) ?>" required><br><br>
-    <label>NIK (HO yang isi):</label>
+    <label>Posisi:</label>
+    <input type="text" name="posisi" value="<?php echo htmlspecialchars($posisi) ?>" required><br><br>
+    <label>NIK:</label>
     <input type="text" name="nik" value="<?php echo htmlspecialchars($nik) ?>"><br><br>
-    <label>No-Jamsostek:</label>
-    <input type="text" name="no_jamsostek" value="<?php echo htmlspecialchars($no_jamsostek) ?>"><br><br>
-    <label>No KTP:</label>
-    <input type="text" name="no_ktp" value="<?php echo htmlspecialchars($no_ktp) ?>" required><br><br>
+    <label>Nama Lengkap:</label>
+    <input type="text" name="nama" value="<?php echo htmlspecialchars($nama) ?>"><br><br>
+    <label>Alamat:</label>
+    <input type="text" name="alamat" value="<?php echo htmlspecialchars($alamat) ?>" required><br><br>
+    <label>Umur:</label>
+    <input type="text" name="umur" value="<?php echo htmlspecialchars($umur) ?>" required><br><br>
     <label>Tanggal Lahir:</label>
     <input type="date" name="tanggal_lahir" value="<?php echo htmlspecialchars($tanggal_lahir) ?>" required><br><br>
-    <label>Nama Ibu Kandung:</label>
-    <input type="text" name="nama_ibu_kandung" value="<?php echo htmlspecialchars($nama_ibu_kandung) ?>" required><br><br>
-    <label>trainee Sejak:</label>
-    <input type="date" name="trainee_sejak" value="<?php echo htmlspecialchars($trainee_sejak) ?>" required><br><br>
     <label>Jenis Kelamin:</label>
     <select name="jenis_kelamin" required>
         <option value="MALE" <?php if ($jenis_kelamin == "MALE") echo "selected" ?>>MALE</option>

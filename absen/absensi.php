@@ -19,7 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nik = $_POST['nik'];
     $status = $_POST['status'];  // Mengambil status dari form
     $tanggal = $_POST['tanggal']; // Tanggal izin yang diinput
+    $selesai = $_POST['selesai']; // Tanggal izin yang diinput
     $keterangan = $_POST['keterangan'];
+
+// Cek jika folder "uploads/" ada, jika tidak, buat foldernya
+$targetDir = "uploads/"; // Direktori tujuan untuk file upload
+if (!is_dir($targetDir)) {
+    mkdir($targetDir, 0777, true); // Buat folder dengan izin penuh (read, write, execute)
+}
 
     // Untuk menangani file upload (opsional)
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
@@ -37,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Query untuk menyimpan data ke database
-    $sql = "INSERT INTO absensi (nama, nik, tanggal, status, keterangan, foto) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO absensi (nama, nik, tanggal, selesai, status, keterangan, foto) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     
-    $stmt->bind_param("ssssss", $nama, $nik, $tanggal, $status, $keterangan, $fotoName);
+    $stmt->bind_param("sssssss", $nama, $nik, $tanggal, $selesai, $status, $keterangan, $fotoName);
     
     if ($stmt->execute()) {
         // Menampilkan alert pop-up menggunakan JavaScript setelah simpan berhasil
@@ -153,6 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-section">
                 <label for="tanggal">Tanggal Izin:</label>
                 <input type="date" id="tanggal" name="tanggal" required>
+            </div>
+
+            <div class="form-section">
+                <label for="selesai">Sampai Tanggal (isi jika lebih dari 1 hari):</label>
+                <input type="date" id="selesai" name="selesai" required>
             </div>
 
             <div class="form-section">

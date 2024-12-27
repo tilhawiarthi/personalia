@@ -8,7 +8,7 @@ $result = $conn->query($query);
 
 if ($result) {
     echo "Data OS Berhasil Dihapus";
-    header("Location: data-os/hapus.php"); // redirect to home page
+    header("Location: data_os.php"); // redirect to home page
     exit;
 } else {
     echo "Gagal menghapus karyawan magang";

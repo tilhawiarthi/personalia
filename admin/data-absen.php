@@ -260,7 +260,7 @@ $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 // Tampilkan data dalam tabel
                 echo "<table>";
-                echo "<tr><th>Nama</th><th>NIK</th><th>Status</th><th>Tanggal</th><th>Keterangan</th><th>Foto</th></tr>";
+                echo "<tr><th>Nama</th><th>NIK</th><th>Status</th><th>Tanggal</th><th>Selesai</th><th>Keterangan</th><th>Foto</th></tr>";
                 
                 // Looping data untuk setiap baris
                 while ($row = $result->fetch_assoc()) {
@@ -269,8 +269,9 @@ $result = $conn->query($sql);
                     echo "<td>" . htmlspecialchars($row["nik"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["status"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["tanggal"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["selesai"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["keterangan"]) . "</td>";
-                    echo "<td><img src='uploads/" . htmlspecialchars($row["foto"]) . "' width='100'></td>";
+                    echo "<td><img src='uploads/" . htmlspecialchars($row["foto"]) . "' width='300'></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

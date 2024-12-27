@@ -30,10 +30,10 @@ if (isset($_GET['month'])) {
 }
 
 // Query untuk mengambil data absensi sesuai bulan dan tahun
-$query = "SELECT nama, nik, tanggal, status FROM absensi 
+$query = "SELECT nama, nik, tanggal, selesai, status FROM absensi 
           WHERE MONTH(tanggal) = :month 
           AND YEAR(tanggal) = :year
-          ORDER BY nama, tanggal ASC";
+          ORDER BY nama, tanggal, selesai ASC";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':month', $selectedMonth, PDO::PARAM_INT);
 $stmt->bindParam(':year', $selectedYear, PDO::PARAM_INT);
@@ -57,7 +57,8 @@ $absensi_data = [];
 foreach ($absensi_items as $item) {
     $nama = $item['nama'];
     $nik = $item['nik'];
-    $tanggal = date('d', strtotime($item['tanggal'])); // Dapatkan tanggal
+    $tanggal_mulai = strtotime($item['tanggal']); // Tanggal mulai
+    $tanggal_selesai = strtotime($item['selesai']); // Tanggal selesai dari kolom "selesai"
     $status = $item['status'];
 
     if (!isset($absensi_data[$nama])) {
@@ -69,14 +70,24 @@ foreach ($absensi_items as $item) {
         ];
     }
 
+    // Proses data absensi dengan rentang waktu untuk "Ijin", "Cuti", dan "Sakit"
+if (in_array($status, ['Ijin', 'Cuti', 'Sakit']) && $tanggal_selesai >= $tanggal_mulai) {
+    $rentang = ($tanggal_selesai - $tanggal_mulai) / (60 * 60 * 24); // Hitung rentang hari
+    for ($i = 0; $i <= $rentang; $i++) {
+        $tanggal = date('d', strtotime("+$i days", $tanggal_mulai)); // Dapatkan tanggal untuk setiap hari dalam rentang
+        $absensi_data[$nama]['hadir'][(int)$tanggal] = $status;
+        $absensi_data[$nama]['total_tidak_hadir']++; // Tambahkan ke total tidak hadir
+    }
+} else {
     // Isi kehadiran per tanggal
-    $absensi_data[$nama]['hadir'][(int)$tanggal] = $status; // Isi status di tanggal yang sesuai
-    if ($status == 1) {
-        $absensi_data[$nama]['total_hadir']++;
-    } else if (in_array($status, ['Cuti', 'Sakit', 'Ijin'])) { // Hitung cuti, sakit, dan izin
+    $tanggal = date('d', $tanggal_mulai);
+    $absensi_data[$nama]['hadir'][(int)$tanggal] = $status;
+    if (in_array($status, ['Cuti', 'Sakit', 'Ijin'])) {
         $absensi_data[$nama]['total_tidak_hadir']++;
     }
 }
+}
+
 
 // Memasukkan data ke dalam Excel
 $row = 2;

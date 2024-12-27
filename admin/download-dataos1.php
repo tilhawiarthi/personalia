@@ -23,7 +23,7 @@ try {
 // Ambil data dari tabel karyawan_magang
 $query = "SELECT 
             ba, ba_cabang, region, cabang, posisi, nik, nama, alamat,
-             umur, tanggal_lahir, jenis_kelamin,
+             umur, tanggal_lahir, jenis_kelamin
           FROM os";
 
 $stmt = $pdo->prepare($query);
@@ -60,8 +60,8 @@ $sheet1->setTitle('Data OS');
 
 // Set header untuk sheet pertama
 $headers = [
-    'ba', 'ba_cabang', 'region', 'cabang', 'posisi', 'nik', 'nama', 'alamat',
-    'umur', 'tanggal_lahir', 'jenis_kelamin',
+    'BA', 'BA CABANG', 'REGION', 'CABANG', 'POSISI', 'NIK', 'NAMA', 'ALAMAT',
+    'UMUR', 'TANGGAL LAHIR', 'JENIS KELAMIN',
 ];
 
 $col = 'A';
@@ -71,7 +71,7 @@ foreach ($headers as $header) {
 }
 
 // Apply styles to header row
-$sheet1->getStyle('A1:P1')->applyFromArray([
+$sheet1->getStyle('A1:K1')->applyFromArray([
     'font' => ['bold' => true],
     'alignment' => [
         'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -123,19 +123,18 @@ foreach ($items as $item) {
     $sheet1->setCellValue('F' . $row, $item['nik']);
     $sheet1->setCellValue('G' . $row, $item['nama']);
     $sheet1->setCellValue('H' . $row, $item['alamat']);
-    $sheet1->setCellValue('I' . $row, $item['umur']);
-    $sheet1->setCellValue('J' . $row, date('d F Y', strtotime($item['tanggal_lahir'])));
-    $sheet1->setCellValue('K' . $row, $item['no_hp']);
-    $sheet1->setCellValue('L' . $row, $item['jenis_kelamin']);
-
-    // Menghitung umur dari tanggal lahir
     $tanggalLahir = new DateTime($item['tanggal_lahir']);
     $today = new DateTime();
     $umur = $today->diff($tanggalLahir)->y; // Menghitung tahun
-    $sheet1->setCellValue('P' . $row, $umur); // Menyimpan umur ke kolom P
+    $sheet1->setCellValue('I' . $row, $umur); // Menyimpan umur ke kolom P
+    $sheet1->setCellValue('J' . $row, date('d F Y', strtotime($item['tanggal_lahir'])));
+    $sheet1->setCellValue('K' . $row, $item['jenis_kelamin']);
+
+    // Menghitung umur dari tanggal lahir
+    
 
     // Apply alignment (center both horizontally and vertically) for the data rows
-    $sheet1->getStyle('A' . $row . ':P' . $row)->applyFromArray([
+    $sheet1->getStyle('A' . $row . ':K' . $row)->applyFromArray([
         'alignment' => [
             'horizontal' => Alignment::HORIZONTAL_CENTER,
             'vertical' => Alignment::VERTICAL_CENTER // Perataan vertikal di tengah
@@ -212,7 +211,7 @@ foreach ($items as $item) {
 }
 
 // Apply borders to the entire table
-$sheet1->getStyle('A1:P' . ($row - 1))->applyFromArray([
+$sheet1->getStyle('A1:K' . ($row - 1))->applyFromArray([
     'borders' => [
         'allBorders' => [
             'borderStyle' => Border::BORDER_THIN
@@ -360,9 +359,9 @@ $sheet2->getColumnDimension('C')->setAutoSize(true);
 $sheet2->getColumnDimension('D')->setAutoSize(true);
 
 // Inisiasi variabel untuk menghitung jumlah aktif, tidak aktif, dan tetap
-$jumlahAktif = 0;
-$jumlahTidakAktif = 0;
-$jumlahTetap = 0;
+// $jumlahAktif = 0;
+// $jumlahTidakAktif = 0;
+// $jumlahTetap = 0;
 
 // Misalkan data status ada di sheet1 kolom C, mulai dari baris ke-2
 $highestRow = $sheet1->getHighestRow(); // Mendapatkan baris terakhir yang memiliki data
@@ -602,7 +601,7 @@ $writer = new Xlsx($spreadsheet);
 
 // Output file to browser
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="Data trainee.xlsx"');
+header('Content-Disposition: attachment;filename="Data OS.xlsx"');
 header('Cache-Control: max-age=0');
 
 // Flush output buffer to prevent corrupt files

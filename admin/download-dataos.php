@@ -231,7 +231,7 @@ function calculateAge($birthdate) {
                 <!-- Button Group -->
                 <div class="btn-container">
                     <a href="tambah-dataos.php" class="btn btn-primary">Tambah Data</a>
-                    <form action="import.php" method="post" enctype="multipart/form-data">
+                    <form action="importOS.php" method="post" enctype="multipart/form-data">
     <input type="file" name="file_excel" accept=".xls, .xlsx">
     <button type="submit" name="import" class="btn btn-primary">Import Data</button>
 </form>

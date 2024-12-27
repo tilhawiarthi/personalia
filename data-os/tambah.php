@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
         
         if ($stmt->execute()) {
             echo "<div class='alert alert-success'>Data berhasil ditambahkan</div>";
-            header("Location: data-os/tambah.php");
+            header("Location: data_os.php");
             exit();
         } else {
             echo "<div class='alert alert-danger'>Gagal menambahkan data: " . $stmt->error . "</div>";
