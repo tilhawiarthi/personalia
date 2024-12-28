@@ -101,10 +101,6 @@ if (!isset($_SESSION['username'])) {
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animasi */
 }
 
-.content:hover {
-    transform: translateY(-5px); /* Elemen sedikit terangkat */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Perbesar bayangan saat hover */
-}
 
 .header {
     text-align: center;
@@ -147,7 +143,7 @@ if (!isset($_SESSION['username'])) {
 
 .stat-box i {
     font-size: 2rem;
-    color: #3498db;
+    color: #2c3e50;
 }
 
 .stat-box p {
