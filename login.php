@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $row['role']; // Menyimpan role pengguna (admin/user)
 
              // Daftar email admin
-             $admin_emails = ['admin@gmail.com', 'tilhaniputu27@gmail.com']; // Tambahkan lebih banyak email admin sesuai kebutuhan
+             $admin_emails = ['admin@gmail.com', 'tilhaniputu27@gmail.com', 'fayola.editha@hso.astra.co.id']; // Tambahkan lebih banyak email admin sesuai kebutuhan
 
              // Cek apakah email termasuk dalam daftar admin
              if (in_array($email, $admin_emails)) {
